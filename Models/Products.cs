@@ -3,6 +3,12 @@ namespace Products.Model
 
     public class Product
     {
+        private readonly Guid _uuid;
+
+        public Guid Uuid
+        {
+            get{return _uuid;}
+        }
 
         private string _name = "";
         
