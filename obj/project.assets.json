@@ -469,19 +469,19 @@
     ]
   },
   "packageFolders": {
-    "/home/pedro/.nuget/packages/": {}
+    "/Users/enzo/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/pedro/Codigos/ecommerce-api/ecommerce-api.csproj",
+      "projectUniqueName": "/Users/enzo/Documents/Development/ecommerce-api/ecommerce-api.csproj",
       "projectName": "ecommerce-api",
-      "projectPath": "/home/pedro/Codigos/ecommerce-api/ecommerce-api.csproj",
-      "packagesPath": "/home/pedro/.nuget/packages/",
-      "outputPath": "/home/pedro/Codigos/ecommerce-api/obj/",
+      "projectPath": "/Users/enzo/Documents/Development/ecommerce-api/ecommerce-api.csproj",
+      "packagesPath": "/Users/enzo/.nuget/packages/",
+      "outputPath": "/Users/enzo/Documents/Development/ecommerce-api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/pedro/.nuget/NuGet/NuGet.Config"
+        "/Users/enzo/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -533,7 +533,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.111/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
       }
     }
   }
