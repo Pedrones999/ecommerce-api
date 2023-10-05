@@ -33,7 +33,7 @@
 - Listar produtos
 - Adicionar produto
 - Remover produto
-- Editar produto
+- Editar produtos
 - Listar usuários
 - Remover usuário
 - Editar usuário

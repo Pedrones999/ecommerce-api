@@ -1,9 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "NSQ65KnyLr4McocUQhb0pEL2mFMtdqIiyH0dp4bHHJ2wepgferyMLqC8PmADLzgBsGar/1iSc2eHYEgNpyIVbQ==",
+=======
+  "dgSpecHash": "prxl5kWwU7n7R+Qo9zJwPn9zazq1VA/OE/WMZRGAWSUVJ4+W+KgN878uAw0WM7TZdcBLNFEn2iLFWr/L+9+/mA==",
+>>>>>>> e9e8a3b060c03c065dc9e933821afce24a63e26f
   "success": true,
-  "projectFilePath": "/home/pedro/Codigos/ecommerce-api/ecommerce-api.csproj",
+  "projectFilePath": "/Users/enzo/Documents/Development/ecommerce-api/ecommerce-api.csproj",
   "expectedPackageFiles": [
+<<<<<<< HEAD
     "/home/pedro/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/pedro/.nuget/packages/microsoft.aspnetcore.openapi/7.0.11/microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
     "/home/pedro/.nuget/packages/microsoft.entityframeworkcore/7.0.11/microsoft.entityframeworkcore.7.0.11.nupkg.sha512",
@@ -34,6 +39,15 @@
     "/home/pedro/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/home/pedro/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
     "/home/pedro/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+=======
+    "/Users/enzo/.nuget/packages/microsoft.aspnetcore.openapi/7.0.11/microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
+    "/Users/enzo/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "/Users/enzo/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
+    "/Users/enzo/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/Users/enzo/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/Users/enzo/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/Users/enzo/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+>>>>>>> e9e8a3b060c03c065dc9e933821afce24a63e26f
   ],
   "logs": []
 }
