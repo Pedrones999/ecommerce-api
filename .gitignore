@@ -1,5 +1,5 @@
-./obj
+/obj
 
 appsettings.json
 
-./Migrations
+/Migrations
