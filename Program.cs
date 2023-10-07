@@ -1,15 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using Products.Connection;
+using Users.Connection;
+
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var conectionString = builder.Configuration["Cprod"]; 
+var connectionString = builder.Configuration.GetConnectionString("ConnectionDbString");
+
+builder.Services.AddDbContext<UserConnectionDb>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContext<ProdConnectionDb>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
 

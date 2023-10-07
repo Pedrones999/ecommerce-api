@@ -12,7 +12,7 @@ public class User
     private string _name = "";
     private string _userPassword = "";
     private string _email = "";
-    private readonly Guid _uuid = Guid.NewGuid();
+    private readonly Guid _userId = Guid.NewGuid();
     
     public Roles Role
     {
@@ -23,9 +23,9 @@ public class User
             throw new ArgumentException("role cannot be changed");
         }
     }
-    public Guid Uuid
+    public Guid UserId
     {
-        get{return _uuid;}
+        get{return _userId;}
         
         set
         {

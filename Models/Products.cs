@@ -5,7 +5,7 @@ public class Product
 {
     private readonly Guid _uuid = Guid.NewGuid();
 
-    public Guid Uuid
+    public Guid ProductId
     {
         get{return _uuid;}
         set

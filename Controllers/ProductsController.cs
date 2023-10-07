@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Products.Model;
+using Products.Connection;
 
 namespace Products.Controller
 {
@@ -9,11 +9,12 @@ namespace Products.Controller
 
     public class ProductsController : ControllerBase 
     {
-        [HttpGet]
-        public ActionResult<List<Product>> Get()
+        
+        private readonly ProdConnectionDb _connectionDb;
+        
+        public ProductsController(ProdConnectionDb connectionDb)
         {
-            return Ok("Ok, products");
-
+            _connectionDb = connectionDb;
         }
     }
 }       

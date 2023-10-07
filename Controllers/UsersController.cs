@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Users.Model;
+using Users.Connection;
 
 namespace Users.Controller
 {
@@ -9,11 +9,12 @@ namespace Users.Controller
 
     public class UsersController : ControllerBase
     {
-        [HttpGet]
-
-        public ActionResult<List<User>> Get()
+        
+        private readonly UserConnectionDb _connectionDb;
+        
+        public UsersController(UserConnectionDb connectionDb)
         {
-            return Ok("Ok,  users");
+            _connectionDb = connectionDb;
         }
     }
 }
