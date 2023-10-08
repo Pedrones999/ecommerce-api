@@ -30,7 +30,7 @@ public class Product
             if(value.Length <= 2)
             {
                 throw new Exception("the name has to have at least 3 characters");
-            }
+            } 
 
             else{ _name = value; }
         }

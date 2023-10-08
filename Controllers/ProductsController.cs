@@ -1,20 +1,26 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Products.Connection;
+using Connection;
+using Products.Model;
 
 namespace Products.Controller
 {
-    [Route("api/Products")]
+    [Route("api/[Controller]")]
     [ApiController]
 
     public class ProductsController : ControllerBase 
     {
         
-        private readonly ProdConnectionDb _connectionDb;
+        private readonly AppDbContext _connectionDb;
         
-        public ProductsController(ProdConnectionDb connectionDb)
+        public ProductsController(AppDbContext connectionDb)
         {
             _connectionDb = connectionDb;
+        }
+        [HttpGet]
+        public ActionResult<List<Product>> Get()
+        {
+            return Ok();            
         }
     }
 }       

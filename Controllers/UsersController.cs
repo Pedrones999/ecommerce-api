@@ -1,20 +1,27 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Users.Connection;
+using Connection;
+using Users.Model;
 
 namespace Users.Controller
 {
-    [Route("api/Users")]
+    [Route("api/[Controller]")]
     [ApiController]
 
     public class UsersController : ControllerBase
     {
         
-        private readonly UserConnectionDb _connectionDb;
+        private readonly AppDbContext _connectionDb;
         
-        public UsersController(UserConnectionDb connectionDb)
+        public UsersController(AppDbContext connectionDb)
         {
             _connectionDb = connectionDb;
+        }
+
+        [HttpGet]
+        public ActionResult<List<User>> Get()
+        {
+            return Ok();            
         }
     }
 }
