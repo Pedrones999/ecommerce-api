@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Connection;
 using Products.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Products.Controller
 {
@@ -11,16 +12,33 @@ namespace Products.Controller
     public class ProductsController : ControllerBase 
     {
         
-        private readonly AppDbContext _connectionDb;
+        private readonly IProductRepository _productRepository;
         
-        public ProductsController(AppDbContext connectionDb)
+        public ProductsController(IProductRepository productRepository)
         {
-            _connectionDb = connectionDb;
+            _productRepository = productRepository;
         }
-        [HttpGet]
-        public ActionResult<List<Product>> Get()
+        
+        [HttpPost]
+        public IActionResult Add(ProductViewModel productView)
         {
+            var product = new Product(productView.name, productView.price, productView.description);
+            _productRepository.Add(product);
             return Ok();            
         }
+    
+        [HttpGet]
+        public ActionResult<List<Product>> GetAll()
+        {
+            var products = _productRepository.GetAllProducts();
+            return Ok(products);
+        }
+
+        // [HttpGet]
+        // public IActionResult GetOne(Guid productId)
+        // {
+        //     var product = _productRepository.GetProduct(productId);
+        //     return Ok(product);
+        // }
     }
 }       

@@ -11,17 +11,34 @@ namespace Users.Controller
     public class UsersController : ControllerBase
     {
         
-        private readonly AppDbContext _connectionDb;
+        private readonly IUserRepository _userRepository;
         
-        public UsersController(AppDbContext connectionDb)
+        public UsersController(IUserRepository userRepository)
         {
-            _connectionDb = connectionDb;
+            _userRepository = userRepository ?? throw new ArgumentException("Something is not wright...");
         }
 
-        [HttpGet]
-        public ActionResult<List<User>> Get()
+        [HttpPost]
+        public IActionResult Add(UserViewModel userView)
         {
-            return Ok();            
+            var user = new User(userView.name, userView.email, userView.userPassword, userView.role);
+            _userRepository.Add(user);
+            return Ok();
         }
+        
+        [HttpGet]
+        public ActionResult<List<User>> GetAll()
+        {
+            var users = _userRepository.GetAllUsers();
+            return Ok(users);            
+        }
+
+        // [HttpGet]
+        // public ActionResult<User> GetOne(Guid userId)
+        // {
+        //     var user = _userRepository.GetUser(userId);
+        //     return Ok(user);
+        // }
+    
     }
 }

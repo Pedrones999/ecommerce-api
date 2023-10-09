@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Users.Model;
 
 public enum Roles
@@ -6,33 +8,21 @@ public enum Roles
     Admin = 2,
 }
 
+[Table("Users")]
 public class User
 {   
     private Roles _role;
-    private string _name = "";
-    private string _userPassword = "";
-    private string _email = "";
-    private readonly Guid _userId = Guid.NewGuid();
-    
     public Roles Role
     {
         get{return _role;}
         
         set
         {
-            throw new ArgumentException("role cannot be changed");
+            _role = value;
         }
     }
-    public Guid UserId
-    {
-        get{return _userId;}
-        
-        set
-        {
-            throw new ArgumentException("uuid cannot be changed");
-        }
-    }
-    
+
+    private string _name = "";
     public string Name
     {
         get{return _name;}
@@ -49,6 +39,22 @@ public class User
             else{ _name = value;} 
         }
     }
+    
+    private string _userPassword = "";
+    public string UserPassword
+    {
+        get{return _userPassword;}
+        set
+        {
+            if(String.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException();
+            }
+            else{ _userPassword = value;}
+        }
+    }
+
+    private string _email = "";
     public string Email
     {
         get{ return _email;}
@@ -61,18 +67,23 @@ public class User
             else{ _email = value;}
         }
     }
-
-    public string UserPassword
+    
+    private Guid _userId;
+    public Guid UserId
     {
-        get{return _userPassword;}
+        get{return _userId;}
         set
-        {
-            if(String.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException();
+                _userId = Guid.NewGuid();
             }
-            else{ _userPassword = value;}
-        }
+    }
+    
+    public User(string name, string email, string userPassword, Roles role)
+    {
+        Name = name;
+        Email = email;
+        UserPassword = userPassword;
+        Role = role;
     }
 }
 

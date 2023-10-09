@@ -1,21 +1,21 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Products.Model;
 
-
+[Table("Products")]
 public class Product
 {
-    private readonly Guid _uuid = Guid.NewGuid();
-
+    private  Guid _productID;
     public Guid ProductId
     {
-        get{return _uuid;}
-        set
+        get{return _productID;}
+        private set
         {
-            throw new ArgumentException("uuid cannot be changed");
+            _productID = Guid.NewGuid();
         }
     }
 
     private string _name = "";
-    
     public string Name
     {
         get{return _name;}
@@ -37,7 +37,6 @@ public class Product
     }
 
     private decimal _price;
-
     public decimal Price
     {
         get{return _price;}
@@ -56,6 +55,14 @@ public class Product
 
     public string? Description {get; set;}
 
-
+    public Product(string name, decimal price, string? description = "")
+    {
+        Name = name;
+        Price = price;
+        if(! String.IsNullOrEmpty(description))
+        {
+            Description = description;
+        }
+    }
 
 }
