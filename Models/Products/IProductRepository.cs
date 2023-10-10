@@ -8,4 +8,8 @@ public interface IProductRepository
     List<Product> GetAllProducts();
 
     Product? GetProduct(Guid productId);
+
+    void UpdateProduct(Guid productId, string? name = null, string? description = null, decimal price = -1);
+
+
 }

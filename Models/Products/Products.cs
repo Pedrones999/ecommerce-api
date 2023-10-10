@@ -9,7 +9,7 @@ public class Product
     public Guid ProductId
     {
         get{return _productId;}
-        set{_productId = value;}
+        private set{_productId = value;}
     }
 
     private string _name = "";
@@ -50,7 +50,7 @@ public class Product
         }
     }
 
-    public string? Description {get; set;}
+    public string Description {get; set;}
 
     public Product(string name, decimal price, string? description = "")
     {

@@ -68,5 +68,23 @@ namespace Users.Controller
                 return NotFound();
             }
         }
+
+        [HttpPatch]
+        [Route("{userId}")]
+        
+        public IActionResult UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null)
+        {
+            var user = _userRepository.GetUser(userId);
+            
+            if(user != null)
+            {
+                _userRepository.UpdateUser(userId, password, name, email);
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

@@ -64,5 +64,23 @@ namespace Products.Controller
                 return NotFound();
             }
         }
+
+        [HttpPatch]
+        [Route("{productId}")]
+        
+        public IActionResult UpdateUser(Guid productId, string? description = null, string? name = null, decimal price = -1)
+        {
+            var product = _productRepository.GetProduct(productId);
+            
+            if(product != null)
+            {
+                _productRepository.UpdateProduct(productId, description, name, price);
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }       

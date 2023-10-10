@@ -9,5 +9,8 @@ public interface IUserRepository
 
     User? GetUser(Guid userId);
 
+    void UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null);
+
+
 
 }

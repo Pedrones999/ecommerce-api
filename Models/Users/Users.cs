@@ -72,7 +72,7 @@ public class User
     public Guid UserId
     {
         get{ return _userId; }
-        set{ _userId = value; }
+        private set{ _userId = value; }
     }
     
     public User(string name, string email, string userPassword, Roles role)

@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
         return _context.Users.ToList();
     }
 
-    public User GetUser(Guid userId)
+    public User? GetUser(Guid userId)
     {
         var user = _context.Users.Find(userId);
         return user;
@@ -24,7 +24,39 @@ public class UserRepository : IUserRepository
     public void RemoveUser(Guid userId)
     {
         var user = _context.Users.Find(userId);
-        _context.Users.Remove(user);
-        _context.SaveChanges();
+        
+        if(user != null)
+        {    
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
+    }
+
+    public void UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null)
+    {
+        var user = _context.Users.Find(userId);
+        
+        if(user != null)
+        {
+
+            if(password != null)
+            {
+                user.UserPassword = password;
+            }
+            
+            if(name != null)
+            {
+                user.Name = name;
+            }
+
+            if(email != null)
+            {
+                user.Email = email;
+            }
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            
+        }
     }
 }
