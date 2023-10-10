@@ -14,7 +14,7 @@ namespace Connection
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            var connectionString = ; //Connection string here
+            var connectionString =""; //Connection string here
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
         }

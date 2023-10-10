@@ -68,14 +68,11 @@ public class User
         }
     }
     
-    private Guid _userId;
+    private Guid _userId = Guid.NewGuid();
     public Guid UserId
     {
-        get{return _userId;}
-        set
-            {
-                _userId = Guid.NewGuid();
-            }
+        get{ return _userId; }
+        set{ _userId = value; }
     }
     
     public User(string name, string email, string userPassword, Roles role)

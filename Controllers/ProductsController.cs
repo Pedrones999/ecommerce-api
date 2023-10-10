@@ -34,11 +34,35 @@ namespace Products.Controller
             return Ok(products);
         }
 
-        // [HttpGet]
-        // public IActionResult GetOne(Guid productId)
-        // {
-        //     var product = _productRepository.GetProduct(productId);
-        //     return Ok(product);
-        // }
+        [HttpGet]
+        [Route("{productId}")]
+        public IActionResult GetOne(Guid productId)
+        {
+            var product = _productRepository.GetProduct(productId);
+
+            if(product != null)
+            {
+                return Ok(product);
+            }
+            
+            else{ return NotFound(); }
+        }
+
+        [HttpDelete]
+        [Route("{productId}")]
+
+        public IActionResult RemoveProduct(Guid productId)
+        {
+            var product = _productRepository.GetProduct(productId);
+            if(product != null)
+            {
+                _productRepository.RemoveProduct(productId);
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }       

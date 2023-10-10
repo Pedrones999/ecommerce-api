@@ -3,9 +3,9 @@ public interface IProductRepository
 {
     void Add(Product product);
 
-    // void Remove(Product product);
+    void RemoveProduct(Guid productId);
 
     List<Product> GetAllProducts();
 
-    //Product GetProduct(Guid productId);
+    Product? GetProduct(Guid productId);
 }

@@ -5,14 +5,11 @@ namespace Products.Model;
 [Table("Products")]
 public class Product
 {
-    private  Guid _productID;
+    private  Guid _productId = Guid.NewGuid();
     public Guid ProductId
     {
-        get{return _productID;}
-        private set
-        {
-            _productID = Guid.NewGuid();
-        }
+        get{return _productId;}
+        set{_productId = value;}
     }
 
     private string _name = "";
