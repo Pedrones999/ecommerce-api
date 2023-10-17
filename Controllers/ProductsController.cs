@@ -20,9 +20,17 @@ namespace Products.Controller
         }
         
         [HttpPost]
-        public IActionResult Add(ProductViewModel productView)
+        public IActionResult Add([FromForm]ProductViewModel productView)
         {
-            var product = new Product(productView.name, productView.price, productView.description);
+            string? imagePath = null;
+
+            if (productView.image != null)
+            {
+                imagePath = Path.Combine("Images", productView.image.FileName);
+            }
+            
+            var product = new Product(productView.name, productView.price, productView.description, imagePath);
+            
             _productRepository.Add(product);
             return Ok();            
         }
@@ -68,13 +76,31 @@ namespace Products.Controller
         [HttpPatch]
         [Route("{productId}")]
         
-        public IActionResult UpdateUser(Guid productId, string? description = null, string? name = null, decimal price = -1)
+        public IActionResult UpdateProduct([FromForm]ProductViewModel productView, Guid productId)
         {
             var product = _productRepository.GetProduct(productId);
             
             if(product != null)
-            {
-                _productRepository.UpdateProduct(productId, description, name, price);
+            {   
+                if(productView.image != null)
+                {
+                    var imagePath = Path.Combine("Images", productView.image.FileName);
+                    _productRepository.UpdateProduct(productId, imagePath: imagePath);
+                }
+                
+                if (productView.name != null)
+                {
+                    _productRepository.UpdateProduct(productId, name: productView.name);
+                }
+
+                if (productView.price != null && productView.price > 0)
+                {
+                    _productRepository.UpdateProduct(productId, price: productView.price);
+                }
+                if(productView.description != null)
+                {
+                    _productRepository.UpdateProduct(productId, description: productView.description);
+                }
                 return Ok();
             }
             else

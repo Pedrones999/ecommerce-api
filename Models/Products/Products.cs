@@ -13,7 +13,7 @@ public class Product
     }
 
     private string _name = "";
-    public string Name
+    public string? Name
     {
         get{return _name;}
 
@@ -34,7 +34,7 @@ public class Product
     }
 
     private decimal _price;
-    public decimal Price
+    public decimal? Price
     {
         get{return _price;}
         
@@ -45,20 +45,32 @@ public class Product
                 throw new ArgumentException("the price have to be bigger than 0");
             }
 
-            else{_price = value;}
+            if (value == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            else{_price = value.Value;}
 
         }
     }
 
-    public string Description {get; set;}
+    public string? Description {get; set;}
 
-    public Product(string name, decimal price, string? description = "")
+    public string? Image {get; set;}
+
+    public Product(string? name, decimal? price, string? description = null, string? image = null)
     {
         Name = name;
         Price = price;
         if(! String.IsNullOrEmpty(description))
         {
             Description = description;
+        }
+
+        if(! String.IsNullOrEmpty(image))
+        {
+            Image = image;
         }
     }
 

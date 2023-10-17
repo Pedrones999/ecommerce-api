@@ -33,12 +33,12 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public void UpdateProduct(Guid productId, string? name = null, string? description = null, decimal price = -1)
+    public void UpdateProduct(Guid productId, string? name = null, string? description = null, decimal? price = null, string? imagePath = null)
     {
         var product = _context.Products.Find(productId);
         if(product != null)
         {   
-            if(name != null)
+            if(! string.IsNullOrEmpty(name))
             {
                 product.Name = name;
             }
@@ -48,7 +48,12 @@ public class ProductRepository : IProductRepository
                 product.Description = description;
             }
 
-            if(price > 0)
+            if(! string.IsNullOrEmpty(imagePath))
+            {
+                product.Image = imagePath;
+            }
+
+            if(price != null)
             {
                 product.Price = price;
             }

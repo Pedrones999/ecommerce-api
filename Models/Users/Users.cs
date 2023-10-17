@@ -12,18 +12,22 @@ public enum Roles
 public class User
 {   
     private Roles _role;
-    public Roles Role
+    public Roles? Role
     {
         get{return _role;}
         
         set
         {
-            _role = value;
+            if(value != null)
+            {
+                _role = value.Value;
+            }
+            else{throw new ArgumentNullException();}
         }
     }
 
     private string _name = "";
-    public string Name
+    public string? Name
     {
         get{return _name;}
         set
@@ -41,7 +45,7 @@ public class User
     }
     
     private string _userPassword = "";
-    public string UserPassword
+    public string? UserPassword
     {
         get{return _userPassword;}
         set
@@ -55,7 +59,7 @@ public class User
     }
 
     private string _email = "";
-    public string Email
+    public string? Email
     {
         get{ return _email;}
         set
@@ -75,7 +79,7 @@ public class User
         private set{ _userId = value; }
     }
     
-    public User(string name, string email, string userPassword, Roles role)
+    public User(string? name, string? email, string? userPassword, Roles? role)
     {
         Name = name;
         Email = email;

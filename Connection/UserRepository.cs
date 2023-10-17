@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public void UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null)
+    public void UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null, Roles? role = null)
     {
         var user = _context.Users.Find(userId);
         

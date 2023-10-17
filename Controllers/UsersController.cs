@@ -18,10 +18,11 @@ namespace Users.Controller
         }
 
         [HttpPost]
-        public IActionResult Add(UserViewModel userView)
+        public IActionResult Add([FromForm]UserViewModel userView)
         {
             var user = new User(userView.name, userView.email, userView.userPassword, userView.role);
             _userRepository.Add(user);
+            
             return Ok();
         }
         
@@ -72,13 +73,31 @@ namespace Users.Controller
         [HttpPatch]
         [Route("{userId}")]
         
-        public IActionResult UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null)
+        public IActionResult UpdateUser([FromForm]UserViewModel userView, Guid userId)
         {
             var user = _userRepository.GetUser(userId);
             
             if(user != null)
-            {
-                _userRepository.UpdateUser(userId, password, name, email);
+            {   
+                if(userView.userPassword != null)
+                {
+                    _userRepository.UpdateUser(userId, password: userView.userPassword);
+                }
+                
+                if(userView.name != null)
+                {
+                    _userRepository.UpdateUser(userId, name: userView.name);
+                }
+                
+                if(userView.email != null)
+                {
+                    _userRepository.UpdateUser(userId, email: userView.email);
+                }
+
+                if(userView.role != null)
+                {
+                    _userRepository.UpdateUser(userId, role: userView.role);
+                }
                 return Ok();
             }
             else
