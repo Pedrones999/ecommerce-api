@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Connection;
 using Products.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Products.Controller
 {
@@ -19,6 +20,7 @@ namespace Products.Controller
             _productRepository = productRepository;
         }
         
+        [Authorize]
         [HttpPost]
         public IActionResult Add([FromForm]ProductViewModel productView)
         {
@@ -56,6 +58,7 @@ namespace Products.Controller
             else{ return NotFound(); }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("{productId}")]
 
@@ -73,6 +76,7 @@ namespace Products.Controller
             }
         }
 
+        [Authorize]
         [HttpPatch]
         [Route("{productId}")]
         

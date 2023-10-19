@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Connection;
 using Users.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Users.Controller
 {
@@ -26,6 +27,7 @@ namespace Users.Controller
             return Ok();
         }
         
+        [Authorize]
         [HttpGet]
         public ActionResult<List<User>> GetAllUsers()
         {
@@ -35,6 +37,7 @@ namespace Users.Controller
 
         }
 
+        [Authorize]
         [HttpGet]
         [Route("{userId}")]
         public ActionResult<User> GetUser(Guid userId)
@@ -52,6 +55,7 @@ namespace Users.Controller
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("{userId}")]
 
@@ -70,6 +74,7 @@ namespace Users.Controller
             }
         }
 
+        
         [HttpPatch]
         [Route("{userId}")]
         

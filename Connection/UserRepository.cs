@@ -15,10 +15,25 @@ public class UserRepository : IUserRepository
         return _context.Users.ToList();
     }
 
-    public User? GetUser(Guid userId)
+    public User? GetUser(Guid? userId)
     {
         var user = _context.Users.Find(userId);
         return user;
+    }
+
+        public Guid? GetIdByName (string userName)
+    {
+        List<User> All = GetAllUsers();
+        foreach(var user in All)
+        {
+            if(user.Name == userName)
+            {
+                return user.UserId;
+            }
+        
+        }
+        
+        return null;
     }
 
     public void RemoveUser(Guid userId)

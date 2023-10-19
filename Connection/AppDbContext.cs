@@ -18,7 +18,6 @@ namespace Connection
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
         }
-
     }
 
 }

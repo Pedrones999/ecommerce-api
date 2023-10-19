@@ -7,7 +7,9 @@ public interface IUserRepository
 
     List<User> GetAllUsers();
 
-    User? GetUser(Guid userId);
+    Guid? GetIdByName(string userName);
+
+    User? GetUser(Guid? userId);
 
     void UpdateUser(Guid userId, string? password = null, string? name = null, string? email = null, Roles? role = null);
 
