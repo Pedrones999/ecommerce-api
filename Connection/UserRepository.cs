@@ -1,4 +1,5 @@
 using Users.Model;
+using System.Linq;
 
 namespace Connection;
 public class UserRepository : IUserRepository
@@ -21,19 +22,19 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-        public Guid? GetIdByName (string userName)
+    public Guid? GetIdByName (string userName)
     {
+
         List<User> All = GetAllUsers();
-        foreach(var user in All)
-        {
-            if(user.Name == userName)
-            {
-                return user.UserId;
-            }
+
+        var id =
+     
+            from user in All
+            where user.Name == userName
+            select user.UserId;
+
         
-        }
-        
-        return null;
+        return id.FirstOrDefault();
     }
 
     public void RemoveUser(Guid userId)

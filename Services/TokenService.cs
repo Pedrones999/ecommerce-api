@@ -16,7 +16,7 @@ public class TokenService
             throw new Exception("Common users cannot get permissions");
         }
         
-        var key = Encoding.UTF8.GetBytes(ApiKey.Secret);
+        var key = Encoding.UTF8.GetBytes(Keys.Secret);
         var tokenConfig = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new Claim[]

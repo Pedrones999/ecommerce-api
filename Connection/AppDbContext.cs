@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Auth;
 using Products.Model;
 using Users.Model;
 
@@ -14,7 +14,7 @@ namespace Connection
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            var connectionString =""; //Connection string here
+            var connectionString = Keys.Connection;
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
         }

@@ -54,7 +54,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 
-var key = Encoding.UTF8.GetBytes(ApiKey.Secret);
+var key = Encoding.UTF8.GetBytes(Keys.Secret);
 
 builder.Services.AddAuthentication(x =>
     {
