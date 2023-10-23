@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using System.Net.Http.Headers;
 using Auth;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Users.Controller
 {
+    [Authorize]
     [Route("api/[Controller]")]
     [ApiController]
 
@@ -21,6 +24,35 @@ namespace Users.Controller
             _userRepository = userRepository ?? throw new ArgumentException("Something is not wright...");
         }
 
+        private bool IsAdmin()
+        {
+            if(User.Claims.ToArray()[1].Value != Roles.Admin.ToString())
+            {
+                return false;
+            }
+            else {return true;}
+        }
+
+        private bool IsAdmin(Users.Model.User user)
+        {
+            if(user.Role != Roles.Admin)
+            {
+                return false;
+            }
+            else {return true;}
+        }
+
+        private bool IsOwner(Guid userId)
+        {
+            if(User.Claims.ToArray()[0].Value != userId.ToString())
+            {
+                return false;
+            }
+            else {return true;}
+
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         [Route("Add")]
 
@@ -29,6 +61,11 @@ namespace Users.Controller
             try
             {
                 var user = new User(userView.name, userView.email, userView.userPassword, userView.role);
+                
+                if(user.Role == Roles.Admin && ! IsAdmin())
+                {
+                    return Unauthorized("Only admins can create admins");
+                }
 
                 _userRepository.Add(user);
                 
@@ -40,20 +77,32 @@ namespace Users.Controller
             }
         }
         
-        [Authorize]
         [HttpGet]
         public ActionResult<List<User>> GetAllUsers()
         {
-            var users = _userRepository.GetAllUsers();
-            return Ok(users);  
+            if(IsAdmin())
+            {
+                Console.WriteLine(IsAdmin());
+                var users = _userRepository.GetAllUsers();
+                return Ok(users);  
+            }
+            else{return Unauthorized("Only an admin can do this!");
+}
 
         }
 
         [HttpGet]
         [Route("{userId}")]
         public ActionResult<User> GetUser(Guid userId)
-        {
-            if(Request.Headers["Authorization"] != Keys.HashingPassword(userId.ToString()))
+        {   
+            User? searched = _userRepository.GetUser(userId);
+
+            if(! IsOwner(userId) || ! IsAdmin())
+            {
+                return Unauthorized("Only the user or an admin can do this!");
+            }
+
+            if(IsAdmin(searched) && ! IsOwner(userId))
             {
                 return Unauthorized("Only the user can do this!");
             }
@@ -79,12 +128,15 @@ namespace Users.Controller
 
         }
 
-        [Authorize]
         [HttpDelete]
         [Route("{userId}")]
 
         public IActionResult RemoveUser(Guid userId)
         {
+            if (! IsAdmin())
+            {
+                return Unauthorized("Only admins can delete profiles");
+            }
             try
             {
                 var user = _userRepository.GetUser(userId);
@@ -107,19 +159,18 @@ namespace Users.Controller
         
         }
 
-        
         [HttpPatch]
         [Route("{userId}")]
         
         public IActionResult UpdateUser([FromForm]UserViewModel userView, Guid userId)
         {
-            var login = Request.Headers["Authorization"];             
             var user = _userRepository.GetUser(userId);
             
-            if (login != Keys.HashingPassword(userId.ToString()))
+            if(! IsOwner(userId))
             {
-                return Unauthorized("Only the user can do this!");
+                return Unauthorized("Only the owner can edit profile");
             }
+
             try
             {
                 if(user != null)

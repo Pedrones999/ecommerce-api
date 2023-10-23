@@ -23,24 +23,21 @@ public class AuthController : ControllerBase
         
         if (user == null)
         {
-            return NotFound();
+            return Unauthorized();
         }
 
         if (user.UserPassword != Keys.HashingPassword(password))
         {
-            return BadRequest();
+            return Unauthorized();
         }
         
         else
         {
             var token = TokenService.GenerateToken(user).ToString().Trim('{','}').Trim().Remove(0,8);
             
-            switch(user.Role)
-            {
-                case Roles.Common: return Ok(Keys.HashingPassword(user.UserId.ToString()));
-                case Roles.Admin : return Ok("Bearer " + token);
-                default : return BadRequest();
-            }
+            return Ok("Bearer " + token);
+    
         }
     }
 }
+

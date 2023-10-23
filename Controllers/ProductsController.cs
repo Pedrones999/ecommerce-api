@@ -1,17 +1,25 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Connection;
+using Users.Model;
 using Products.Model;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Products.Controller
 {
+    [Authorize]
     [Route("api/[Controller]")]
     [ApiController]
 
     public class ProductsController : ControllerBase 
     {
-        
+        private bool IsAdmin()
+        {
+            if(User.Claims.ToArray()[1].Value != Roles.Admin.ToString())
+            {
+                return false;
+            }
+            else {return true;}
+        }
         private readonly IProductRepository _productRepository;
         
         public ProductsController(IProductRepository productRepository)
@@ -19,36 +27,51 @@ namespace Products.Controller
             _productRepository = productRepository;
         }
         
-        [Authorize]
         [HttpPost]
         public IActionResult Add([FromForm]ProductViewModel productView)
         {
-            string? imagePath = null;
-
-            if (productView.image != null)
+            if(! IsAdmin())
             {
-                imagePath = Path.Combine("Images", productView.image.FileName);
+                return Unauthorized("Only admins can do this");
             }
-            
-            var product = new Product(productView.name, productView.price, productView.description, imagePath);
-            
-            _productRepository.Add(product);
-            return Ok();            
-        }
-    
+
+            try
+            {
+                string? imagePath = null;
+
+                if (productView.image != null)
+                {
+                    imagePath = Path.Combine("Images", productView.image.FileName);
+                }
+                
+                var product = new Product(productView.name, productView.price, productView.description, imagePath);
+                
+                _productRepository.Add(product);
+                return Ok();            
+            }            
+            catch(Exception error)
+            {
+                return BadRequest(error.Message);
+            }
+
+            }
+        
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<List<Product>> GetAll()
         {
-            var head = Request.Headers;
-            // for (int i = 0; i < head.Keys.ToArray().Length; i++)
-            // {
-            //     Console.WriteLine(head.Keys.ToArray()[i]); 
-            // }
-            Console.WriteLine(head["Authorization"]);
+            var claims = User.Claims;
+
+            foreach(var claim in claims)
+            {
+                Console.WriteLine(claim);
+                Console.WriteLine(claim.Value);
+            }
             var products = _productRepository.GetAllProducts();
             return Ok(products);
         }
-
+        
+        [AllowAnonymous]
         [HttpGet]
         [Route("{productId}")]
         public IActionResult GetOne(Guid productId)
@@ -63,58 +86,83 @@ namespace Products.Controller
             else{ return NotFound(); }
         }
 
-        [Authorize]
         [HttpDelete]
         [Route("{productId}")]
 
         public IActionResult RemoveProduct(Guid productId)
         {
-            var product = _productRepository.GetProduct(productId);
-            if(product != null)
+            if(! IsAdmin())
             {
-                _productRepository.RemoveProduct(productId);
-                return Ok();
+                return Unauthorized("Only admins can do this");
             }
-            else
+
+            try
             {
-                return NotFound();
+                var product = _productRepository.GetProduct(productId);
+                if(product != null)
+                {
+                    _productRepository.RemoveProduct(productId);
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
+            
+            catch(Exception error)
+            {
+                return BadRequest(error.Message);
+            }
+            
         }
 
-        [Authorize]
         [HttpPatch]
         [Route("{productId}")]
         
         public IActionResult UpdateProduct([FromForm]ProductViewModel productView, Guid productId)
         {
-            var product = _productRepository.GetProduct(productId);
-            
-            if(product != null)
-            {   
-                if(productView.image != null)
-                {
-                    var imagePath = Path.Combine("Images", productView.image.FileName);
-                    _productRepository.UpdateProduct(productId, imagePath: imagePath);
-                }
-                
-                if (productView.name != null)
-                {
-                    _productRepository.UpdateProduct(productId, name: productView.name);
-                }
-
-                if (productView.price != null && productView.price > 0)
-                {
-                    _productRepository.UpdateProduct(productId, price: productView.price);
-                }
-                if(productView.description != null)
-                {
-                    _productRepository.UpdateProduct(productId, description: productView.description);
-                }
-                return Ok();
-            }
-            else
+            if(! IsAdmin())
             {
-                return NotFound();
+                return Unauthorized("Only admins can do this");
+            }
+        
+            try
+            {
+                var product = _productRepository.GetProduct(productId);
+                
+                if(product != null)
+                {   
+                    if(productView.image != null)
+                    {
+                        var imagePath = Path.Combine("Images", productView.image.FileName);
+                        _productRepository.UpdateProduct(productId, imagePath: imagePath);
+                    }
+                    
+                    if (productView.name != null)
+                    {
+                        _productRepository.UpdateProduct(productId, name: productView.name);
+                    }
+
+                    if (productView.price != null && productView.price > 0)
+                    {
+                        _productRepository.UpdateProduct(productId, price: productView.price);
+                    }
+                    if(productView.description != null)
+                    {
+                        _productRepository.UpdateProduct(productId, description: productView.description);
+                    }
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            
+            catch(Exception error)
+            {
+                return BadRequest(error.Message);
             }
         }
     }
