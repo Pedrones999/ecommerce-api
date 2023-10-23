@@ -39,6 +39,12 @@ namespace Products.Controller
         [HttpGet]
         public ActionResult<List<Product>> GetAll()
         {
+            var head = Request.Headers;
+            // for (int i = 0; i < head.Keys.ToArray().Length; i++)
+            // {
+            //     Console.WriteLine(head.Keys.ToArray()[i]); 
+            // }
+            Console.WriteLine(head["Authorization"]);
             var products = _productRepository.GetAllProducts();
             return Ok(products);
         }

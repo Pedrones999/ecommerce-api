@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Products.Model;
+using Auth;
 
 namespace Connection;
 public class ProductRepository : IProductRepository
 {
     private readonly AppDbContext _context = new AppDbContext();
     public void Add(Product product)
-    {
+    {   
         _context.Products.Add(product);
         _context.SaveChanges();
     }

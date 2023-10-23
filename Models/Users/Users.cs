@@ -54,7 +54,14 @@ public class User
             {
                 throw new ArgumentNullException();
             }
+            
+            if(value.Length <= 2)
+            {
+                throw new Exception("the name has to have at least 3 characters");
+            }
+            
             else{ _userPassword = value;}
+
         }
     }
 
@@ -67,6 +74,10 @@ public class User
             if(String.IsNullOrEmpty(value))
             {
                 throw new ArgumentNullException();
+            }
+            if(! value.Contains('@') || ! value.Contains('.') || value.Length < 10)
+            {
+                throw new ArgumentException("use a valid email");
             }
             else{ _email = value;}
         }

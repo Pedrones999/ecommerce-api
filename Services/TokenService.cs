@@ -10,18 +10,13 @@ public class TokenService
 {
 
     public static object GenerateToken(User user)
-    {
-        if(user.Role != Roles.Admin)
-        {
-            throw new Exception("Common users cannot get permissions");
-        }
-        
+    {  
         var key = Encoding.UTF8.GetBytes(Keys.Secret);
         var tokenConfig = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim("userId", user.UserId.ToString())
+                new Claim("userId", Keys.HashingPassword(user.UserId.ToString()))
             }),
             Expires = DateTime.UtcNow.AddHours(3),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -30,6 +25,7 @@ public class TokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenConfig);
         var tokenString = tokenHandler.WriteToken(token);
+        
 
         return new
         {

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Connection;
 using Users.Model;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
+using System.Net.Http.Headers;
+using Auth;
 
 namespace Users.Controller
 {
@@ -19,40 +22,61 @@ namespace Users.Controller
         }
 
         [HttpPost]
+        [Route("Add")]
+
         public IActionResult Add([FromForm]UserViewModel userView)
         {
-            var user = new User(userView.name, userView.email, userView.userPassword, userView.role);
-            _userRepository.Add(user);
-            
-            return Ok();
+            try
+            {
+                var user = new User(userView.name, userView.email, userView.userPassword, userView.role);
+
+                _userRepository.Add(user);
+                
+                return Ok();
+            }    
+            catch(Exception error)
+            {
+                return BadRequest(error.Message);
+            }
         }
         
         [Authorize]
         [HttpGet]
         public ActionResult<List<User>> GetAllUsers()
         {
-
             var users = _userRepository.GetAllUsers();
             return Ok(users);  
 
         }
 
-        [Authorize]
         [HttpGet]
         [Route("{userId}")]
         public ActionResult<User> GetUser(Guid userId)
         {
-            var user = _userRepository.GetUser(userId);
-            
-            if(user != null)
+            if(Request.Headers["Authorization"] != Keys.HashingPassword(userId.ToString()))
             {
-                return Ok(user);
+                return Unauthorized("Only the user can do this!");
+            }
+            try
+            {
+                var user = _userRepository.GetUser(userId);
+                
+                if(user != null)
+                {
+                    return Ok(user);
+                }
+                
+                else
+                {
+                    return NotFound();
+                }
             }
             
-            else
+            catch(Exception error)
             {
-                return NotFound();
+                return BadRequest(error.Message);
             }
+
         }
 
         [Authorize]
@@ -61,17 +85,26 @@ namespace Users.Controller
 
         public IActionResult RemoveUser(Guid userId)
         {
-            var user = _userRepository.GetUser(userId);
+            try
+            {
+                var user = _userRepository.GetUser(userId);
+                
+                if(user != null)
+                {
+                    _userRepository.RemoveUser(userId);
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch(Exception error)
             
-            if(user != null)
             {
-                _userRepository.RemoveUser(userId);
-                return Ok();
+                return BadRequest(error.Message);    
             }
-            else
-            {
-                return NotFound();
-            }
+        
         }
 
         
@@ -80,35 +113,48 @@ namespace Users.Controller
         
         public IActionResult UpdateUser([FromForm]UserViewModel userView, Guid userId)
         {
+            var login = Request.Headers["Authorization"];             
             var user = _userRepository.GetUser(userId);
             
-            if(user != null)
-            {   
-                if(userView.userPassword != null)
-                {
-                    _userRepository.UpdateUser(userId, password: userView.userPassword);
-                }
-                
-                if(userView.name != null)
-                {
-                    _userRepository.UpdateUser(userId, name: userView.name);
-                }
-                
-                if(userView.email != null)
-                {
-                    _userRepository.UpdateUser(userId, email: userView.email);
-                }
-
-                if(userView.role != null)
-                {
-                    _userRepository.UpdateUser(userId, role: userView.role);
-                }
-                return Ok();
-            }
-            else
+            if (login != Keys.HashingPassword(userId.ToString()))
             {
-                return NotFound();
+                return Unauthorized("Only the user can do this!");
             }
+            try
+            {
+                if(user != null)
+                {   
+                    if(userView.userPassword != null)
+                    {
+                        _userRepository.UpdateUser(userId, password: userView.userPassword);
+                    }
+                    
+                    if(userView.name != null)
+                    {   
+                        _userRepository.UpdateUser(userId, name: userView.name);
+                    }
+                    
+                    if(userView.email != null)
+                    {
+                        _userRepository.UpdateUser(userId, email: userView.email);
+                    }
+
+                    if(userView.role != null)
+                    {
+                        _userRepository.UpdateUser(userId, role: userView.role);
+                    }
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch(Exception error)
+            {
+                return BadRequest(error.Message);
+            }
+
         }
     }
 }

@@ -1,12 +1,20 @@
 using Users.Model;
 using System.Linq;
+using Auth;
 
 namespace Connection;
 public class UserRepository : IUserRepository
 {   
     private readonly AppDbContext _context = new AppDbContext();
     public void Add(User user)
-    {
+    {   
+        if (String.IsNullOrEmpty(user.UserPassword))
+        {
+            throw new Exception("null password");
+        }
+        
+        user.UserPassword = Keys.HashingPassword(user.UserPassword);
+
         _context.Users.Add(user);
         _context.SaveChanges();
     }

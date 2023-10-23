@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using ecommerce_api.Service;
 using Microsoft.AspNetCore.Mvc;
 using Users.Model;
@@ -12,7 +13,7 @@ public class AuthController : ControllerBase
         
     public AuthController(IUserRepository userRepository)
     {
-        _userRepository = userRepository ?? throw new ArgumentException("Something is not wright...");
+        _userRepository = userRepository;
     }
     
     [HttpPost]
@@ -25,21 +26,21 @@ public class AuthController : ControllerBase
             return NotFound();
         }
 
-        if (user.UserPassword != password)
+        if (user.UserPassword != Keys.HashingPassword(password))
         {
             return BadRequest();
         }
-
-        if (user.Role != Roles.Admin)
-        {
-            return BadRequest();
-        }
-
+        
         else
         {
             var token = TokenService.GenerateToken(user).ToString().Trim('{','}').Trim().Remove(0,8);
-
-            return Ok("Bearer " + token);
+            
+            switch(user.Role)
+            {
+                case Roles.Common: return Ok(Keys.HashingPassword(user.UserId.ToString()));
+                case Roles.Admin : return Ok("Bearer " + token);
+                default : return BadRequest();
+            }
         }
     }
 }
