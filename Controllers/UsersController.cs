@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Connection;
+using static GenericTools.GenericTools;
 using Users.Model;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
@@ -33,7 +33,7 @@ namespace Users.Controller
             else {return true;}
         }
 
-        private bool IsAdmin(Users.Model.User user)
+        private bool IsAdmin(User user)
         {
             if(user.Role != Roles.Admin)
             {
@@ -54,13 +54,12 @@ namespace Users.Controller
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("Add")]
 
         public IActionResult Add([FromForm]UserViewModel userView)
         {
             try
             {
-                var user = new User(userView.name, userView.email, userView.userPassword, userView.role);
+                var user = new User(userView.name, userView.email, userView.password, userView.role);
                 
                 if(user.Role == Roles.Admin && ! IsAdmin())
                 {
@@ -73,21 +72,29 @@ namespace Users.Controller
             }    
             catch(Exception error)
             {
-                return BadRequest(error.Message);
+                string message = errorFilter(error);
+                return BadRequest(message);
             }
         }
         
         [HttpGet]
         public ActionResult<List<User>> GetAllUsers()
         {
-            if(IsAdmin())
+            try
             {
-                Console.WriteLine(IsAdmin());
-                var users = _userRepository.GetAllUsers();
-                return Ok(users);  
+                    if(IsAdmin())
+                    {
+                        var users = _userRepository.GetAllUsers();
+                        return Ok(users);  
+                    }
+                    else{return Unauthorized("Only an admin can do this!");}
             }
-            else{return Unauthorized("Only an admin can do this!");
-}
+            
+            catch(Exception error)
+            {
+                string message = errorFilter(error);
+                return BadRequest(message);
+            }
 
         }
 
@@ -97,7 +104,7 @@ namespace Users.Controller
         {   
             User? searched = _userRepository.GetUser(userId);
 
-            if(! IsOwner(userId) || ! IsAdmin())
+            if(! IsOwner(userId) && ! IsAdmin())
             {
                 return Unauthorized("Only the user or an admin can do this!");
             }
@@ -123,7 +130,8 @@ namespace Users.Controller
             
             catch(Exception error)
             {
-                return BadRequest(error.Message);
+                string message = errorFilter(error);
+                return BadRequest(message);
             }
 
         }
@@ -154,7 +162,8 @@ namespace Users.Controller
             catch(Exception error)
             
             {
-                return BadRequest(error.Message);    
+                string message = errorFilter(error);
+                return BadRequest(message);
             }
         
         }
@@ -175,9 +184,9 @@ namespace Users.Controller
             {
                 if(user != null)
                 {   
-                    if(userView.userPassword != null)
+                    if(userView.password != null)
                     {
-                        _userRepository.UpdateUser(userId, password: userView.userPassword);
+                        _userRepository.UpdateUser(userId, password: userView.password);
                     }
                     
                     if(userView.name != null)
@@ -203,7 +212,8 @@ namespace Users.Controller
             }
             catch(Exception error)
             {
-                return BadRequest(error.Message);
+                string message = errorFilter(error);
+                return BadRequest(message);
             }
 
         }

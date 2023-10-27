@@ -22,7 +22,7 @@ public class User
             {
                 _role = value.Value;
             }
-            else{throw new ArgumentNullException();}
+            else{throw new ArgumentNullException("role");}
         }
     }
 
@@ -34,7 +34,7 @@ public class User
         {
             if(String.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Name");
             }
             if(value.Length <= 2)
             {
@@ -52,7 +52,7 @@ public class User
         {
             if(String.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("password");
             }
             
             if(value.Length <= 2)
@@ -73,7 +73,7 @@ public class User
         {
             if(String.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("email");
             }
             if(! value.Contains('@') || ! value.Contains('.') || value.Length < 10)
             {

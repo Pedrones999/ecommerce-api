@@ -34,7 +34,7 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public void UpdateProduct(Guid productId, string? name = null, string? description = null, decimal? price = null, string? imagePath = null)
+    public void UpdateProduct(Guid productId, string? name = null, string? description = null, double? price = null, string? imagePath = null)
     {
         var product = _context.Products.Find(productId);
         if(product != null)

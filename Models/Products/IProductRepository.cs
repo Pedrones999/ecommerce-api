@@ -9,7 +9,7 @@ public interface IProductRepository
 
     Product? GetProduct(Guid productId);
 
-    void UpdateProduct(Guid productId, string? name = null, string? description = null, decimal? price = null, string? imagePath = null);
+    void UpdateProduct(Guid productId, string? name = null, string? description = null, double? price = null, string? imagePath = null);
 
 
 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Users.Model;
 using Products.Model;
 using Microsoft.AspNetCore.Authorization;
+using static GenericTools.GenericTools;
+
 
 namespace Products.Controller
 {
@@ -60,15 +62,18 @@ namespace Products.Controller
         [HttpGet]
         public ActionResult<List<Product>> GetAll()
         {
-            var claims = User.Claims;
-
-            foreach(var claim in claims)
+            try
             {
-                Console.WriteLine(claim);
-                Console.WriteLine(claim.Value);
+                var claims = User.Claims;
+
+                var products = _productRepository.GetAllProducts();
+                return Ok(products);
             }
-            var products = _productRepository.GetAllProducts();
-            return Ok(products);
+            catch(Exception error)
+            {
+                string message = errorFilter(error);
+                return BadRequest(message);
+            }
         }
         
         [AllowAnonymous]
@@ -76,14 +81,23 @@ namespace Products.Controller
         [Route("{productId}")]
         public IActionResult GetOne(Guid productId)
         {
-            var product = _productRepository.GetProduct(productId);
-
-            if(product != null)
+            try
             {
-                return Ok(product);
+                var product = _productRepository.GetProduct(productId);
+
+                if(product != null)
+                {
+                    return Ok(product);
+                }
+                
+                else{ return NotFound(); }    
             }
             
-            else{ return NotFound(); }
+            catch(Exception error)
+            {
+                string message = errorFilter(error);
+                return BadRequest(message);
+            }
         }
 
         [HttpDelete]
@@ -112,7 +126,8 @@ namespace Products.Controller
             
             catch(Exception error)
             {
-                return BadRequest(error.Message);
+                string message = errorFilter(error);
+                return BadRequest(message);
             }
             
         }
@@ -162,7 +177,8 @@ namespace Products.Controller
             
             catch(Exception error)
             {
-                return BadRequest(error.Message);
+                string message = errorFilter(error);
+                return BadRequest(message);
             }
         }
     }

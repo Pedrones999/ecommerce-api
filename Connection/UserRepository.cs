@@ -1,16 +1,48 @@
 using Users.Model;
-using System.Linq;
 using Auth;
 
 namespace Connection;
 public class UserRepository : IUserRepository
 {   
     private readonly AppDbContext _context = new AppDbContext();
+    
+    private bool isUniqueEmail(string email)
+    {
+        var emails = _context.Users
+            .Select(u => u.Email);
+       
+        if(! emails.Contains(email))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private bool isUniqueName(string name)
+    {
+        var names = _context.Users
+            .Select(u => u.Name);
+       
+        if(! names.Contains(name))
+        {
+            return true;
+        }
+        
+        return false;
+    }  
+    
     public void Add(User user)
     {   
-        if (String.IsNullOrEmpty(user.UserPassword))
+        
+        if(! isUniqueEmail(user.Email))
         {
-            throw new Exception("null password");
+            throw new Exception("email has to be unique");
+        }
+        
+        if(! isUniqueName(user.Name))
+        {
+            throw new Exception("Name has to be unique");
         }
         
         user.UserPassword = Keys.HashingPassword(user.UserPassword);
@@ -33,14 +65,9 @@ public class UserRepository : IUserRepository
     public Guid? GetIdByName (string userName)
     {
 
-        List<User> All = GetAllUsers();
-
-        var id =
-     
-            from user in All
-            where user.Name == userName
-            select user.UserId;
-
+        var id = _context.Users
+            .Where(u => u.Name == userName)
+            .Select(u => u.UserId);
         
         return id.FirstOrDefault();
     }

@@ -21,7 +21,7 @@ public class Product
         {
             if(String.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("name");
             }
 
             if(value.Length <= 2)
@@ -33,8 +33,8 @@ public class Product
         }
     }
 
-    private decimal _price;
-    public decimal? Price
+    private double _price;
+    public double? Price
     {
         get{return _price;}
         
@@ -47,7 +47,7 @@ public class Product
 
             if (value == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("price");
             }
 
             else{_price = value.Value;}
@@ -59,7 +59,7 @@ public class Product
 
     public string? Image {get; set;}
 
-    public Product(string? name, decimal? price, string? description = null, string? image = null)
+    public Product(string? name, double? price, string? description = null, string? image = null)
     {
         Name = name;
         Price = price;

@@ -1,4 +1,5 @@
-using System.Net.Http.Headers;
+using System.ComponentModel;
+using static GenericTools.GenericTools;
 using ecommerce_api.Service;
 using Microsoft.AspNetCore.Mvc;
 using Users.Model;
@@ -17,27 +18,35 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Auth(string username, string password)
+    public IActionResult Auth([FromForm] string username, [FromForm] string password)
     {
-        User? user = _userRepository.GetUser(_userRepository.GetIdByName(username));
-        
-        if (user == null)
+        try
         {
-            return Unauthorized();
-        }
-
-        if (user.UserPassword != Keys.HashingPassword(password))
-        {
-            return Unauthorized();
-        }
-        
-        else
-        {
-            var token = TokenService.GenerateToken(user).ToString().Trim('{','}').Trim().Remove(0,8);
+            User? user = _userRepository.GetUser(_userRepository.GetIdByName(username));
             
-            return Ok("Bearer " + token);
-    
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (user.UserPassword != Keys.HashingPassword(password))
+            {
+                return Unauthorized();
+            }
+            
+            else
+            {
+                var token = TokenService.GenerateToken(user).ToString().Trim('{','}').Trim().Remove(0,8);
+                
+                return Ok("Bearer " + token);
+        
+            }
+        }
+        catch(Exception error)
+        {
+            string message = errorFilter(error);
+            return BadRequest(message);
         }
     }
-}
+}   
 

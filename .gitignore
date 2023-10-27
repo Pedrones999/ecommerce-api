@@ -1,9 +1,11 @@
 /obj
 
+/Properties
+
 appsettings.json
 
 /Migrations
 
 /.vscode
 
-/Keys.cs 
+Keys.cs 
