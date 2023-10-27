@@ -12,8 +12,7 @@
 
 ## Entidades
 
-- Usuário
-- Administrador
+- Usuário(admin ou comum)
 - Produto
 
 ## Funcionalidades
